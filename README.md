@@ -89,37 +89,69 @@ db.clientes.insertOne({
 
 1. Consultar todos los productos que tengan stock mayor a 20 unidades.
 ```js
-
+db.productos.find({ stock: { $gt: 20 } },{ nombre: 1, _id: 0 })
+/// Resultado de la Lectura
 ```
+![alt text](image-2.png)
+
 2. Encontrar los clientes que no han comprado aún ningún producto.
 ```js
-
+db.clientes.find({ compras: { $size: 0 } },{ nombre: 1, _id: 0 })
+/// Resultado de la Lectura
+{
+  nombre: 'Mario Mendoza'
+}
 ```
-
 ---
 
 ### 🚀 Actualización
 
 1. Aumentar en 10 unidades el stock del producto `"Borojó deshidratado"`.
 ```js
-
+db.productos.updateOne({nombre:"Borojó deshidratado"},{$inc:{stock:10}})
+/// Resultado de la Actualización
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
 ```
 2. Añadir el tag `"bajo azúcar"` a todos los productos de la categoría `"Bebida"`.
 ```js
-
+db.productos.updateMany({categoria:"Bebida"},{$push:{ tags: "bajo azúcar" }})
+/// Resultado de la Actualización
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
 ```
-
+![alt text](image-3.png)
 ---
 
 ### 🚀 Eliminación
 
 1. Eliminar el cliente que tenga el correo `"juan@email.com"`.
 ```js
-
+db.clientes.deleteOne({ email: "juan@email.com" });
+/// Resultado de la Eliminación
+{
+  acknowledged: true,
+  deletedCount: 1
+}
+/// El _id:3 correspondia al cliente con el email
 ```
+![alt text](image-4.png)
+
 2. Eliminar todos los productos con stock menor a 5 (considera esto como un proceso de limpieza de inventario).
 ```js
-
+db.productos.deleteMany({ stock: { $lt: 5 } });
+/// Resultado de la Eliminación
+/// No arroja respuesta ya que no hay productos ocn stock menor a 5 :)
 ```
 
 ---
@@ -128,16 +160,24 @@ db.clientes.insertOne({
 
 1. Buscar productos cuyo nombre **empiece** por `"Boro"`.
 ```js
-
+db.productos.find({ nombre: { $regex: "^Boro", $options: "i" } });
+/// Resultado de las consultas con Expresiones Regulares
 ```
+![alt text](image-5.png)
+
 2. Encontrar productos cuyo nombre contenga la palabra `"con"` (como en “Concentrado de borojó”).
 ```js
-
+db.productos.find({ nombre: { $regex: "con", $options: "i" } });
+/// Resultado de las consultas con Expresiones Regulares
 ```
+![alt text](image-6.png)
+
 3. Encontrar clientes cuyo nombre tenga la letra `"z"` (insensible a mayúsculas/minúsculas).
 ```js
-
+db.clientes.find({ nombre: { $regex: "z", $options: "i" } },{ nombre: 1, _id: 0 });
+/// Resultado de las consultas con Expresiones Regulares
 ```
+![alt text](image-7.png)
 
 ---
 

@@ -20,26 +20,26 @@ db.clientes.insertOne({
 });
 // ### Lectura
 // 1. Consultar todos los productos que tengan stock mayor a 20 unidades.
-
+db.productos.find({ stock: { $gt: 20 } },{ nombre: 1, _id: 0 })
 // 2. Encontrar los clientes que no han comprado aún ningún producto.
-
+db.clientes.find({ compras: { $size: 0 } },{ nombre: 1, _id: 0 })
 // ### Actualización
 // 1. Aumentar en 10 unidades el stock del producto `"Borojó deshidratado"`.
-
+db.productos.updateOne({nombre:"Borojó deshidratado"},{$inc:{stock:10}})
 // 2. Añadir el tag `"bajo azúcar"` a todos los productos de la categoría `"Bebida"`.
-
+db.productos.updateMany({categoria:"Bebida"},{$push:{ tags: "bajo azúcar" }})
 // ### Eliminación
 // 1. Eliminar el cliente que tenga el correo `"juan@email.com"`.
-
+db.clientes.deleteOne({ email: "juan@email.com" });
 // 2. Eliminar todos los productos con stock menor a 5 (considera esto como un proceso de limpieza de inventario).
-
+db.productos.deleteMany({ stock: { $lt: 5 } });
 // ### Consultas con Expresiones Regulares
 // 1. Buscar productos cuyo nombre **empiece** por `"Boro"`.
-
+db.productos.find({ nombre: { $regex: "^Boro", $options: "i" } });
 // 2. Encontrar productos cuyo nombre contenga la palabra `"con"` (como en “Concentrado de borojó”).
-
+db.productos.find({ nombre: { $regex: "con", $options: "i" } });
 // 3. Encontrar clientes cuyo nombre tenga la letra `"z"` (insensible a mayúsculas/minúsculas).
-
+db.clientes.find({ nombre: { $regex: "z", $options: "i" } });
 // ### Operadores en consultas sobre arrays
 // 1. Buscar clientes que tengan `"natural"` en sus preferencias.
 
